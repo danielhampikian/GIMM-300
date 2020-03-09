@@ -1,0 +1,32 @@
+* {
+  font-family: Helvetica, Arial, sans-serif;
+  text-align: center;
+}
+.button_custom {
+  width: 80px;
+  height: 60px;
+  background-color: aqua;
+  border-radius: 10px;
+  border-color: black; 
+}
+#placeholder {
+    width: 100%;
+    height: auto; 
+
+}
+
+img{
+  margin: 10px;
+}
+.card{
+  margin: 10px;
+}
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-container > img {
+  width: 100px;
+  text-align: center;
+}
