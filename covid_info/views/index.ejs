@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Virus Info</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+
+    </head>
+    <body>
+        <div class="container">
+            <fieldset>
+                <form action="/" method="post">
+                    <input name="state" type="text" class="state-input" placeholder="Enter a State" required>
+                    <input type="submit" class="info-button" value="Get COVID Info for State">
+                </form>
+                <p><%=state%></p>
+                <p class="cases">Cases: <%=cases%></p>
+                <p class="deaths">Deaths: <%=deaths%></p>
+
+            </fieldset>
+        </div>
+    </body>
+</html>

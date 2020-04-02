@@ -1,0 +1,17 @@
+{
+  "name": "covid_info",
+  "version": "1.0.0",
+  "description": "\"information about novel covid by state\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Hampikian",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "novelcovid": "^1.0.7-b3"
+  }
+}
