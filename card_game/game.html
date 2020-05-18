@@ -16,13 +16,40 @@
     </div>
         
     </div>
+    
     <div id="play-area">
         <div id="opponent-cards">
         </div>
         <div id="player-cards">
         </div>
         <button id="attack-defend" onclick="startTurn()">Attack</button>
+    </div>
+    
+    <!-- The Modal -->
+    <div id="game-modal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close">&times;</span>
+        <h2 id="modal-head"></h2>
       </div>
+      <div class="modal-body">
+        <p id="modal-title"></p>
+        <p id=modal-info></p>
+        <div id="card-upgrade" class="card-focus">
+            <div id=current-card></div>
+            <button id="upgrade-attack" onclick="upgradeAttack()">Upgrade Health</button>
+            <button id="upgrade-health" onclick="updgradeHealth()">Upgrade Attack</button>
+            <button id="revive" onclick="revive()">Revive</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <h3 id="modal-foot"></h3>
+      </div>
+    </div>
+  
+  </div>
 
 
 <script src="game.js"></script>
