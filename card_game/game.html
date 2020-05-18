@@ -8,22 +8,20 @@
 
 <body>
     <div id="score">
-        <h1 id=player-score></h1>
-        <h2 id="wins"></h2>
-        <h2 id="losses"></h2>
+        <div class="center">
+       
+        <h1 class="info" id=player-score>Player Info</h1>
+        <h2 class="info"id="player-health"></h2>
+        <h2 class="info"id="opponent-health"></h2>
+    </div>
+        
     </div>
     <div id="play-area">
-        <div id="health">
-            <h1 id="player-health"></h1>
-          </div>
-            <h1 id="opponent-health"></h1>
-        </div>
-
         <div id="opponent-cards">
         </div>
-        <br>
         <div id="player-cards">
         </div>
+        <button id="attack-defend" onclick="startTurn()">Attack</button>
       </div>
 
 
