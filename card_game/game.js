@@ -1,5 +1,4 @@
-var playerTurnOver,gameOver = false;
-var opponentTurnOver = true;
+var gameOver = false;
 var opponentCardArray = [[0, 0, "<i class='fas fa-", " fa-10x'></i>","","",""], [0, 0, "<i class='fas fa-", " fa-10x'></i>","","",""],[0, 0, "<i class='fas fa-", " fa-10x'></i>","","",""]];
 var playerCardArray = [[0, 0, "<i class='fas fa-", " fa-10x'></i>","","",""],[0, 0, "<i class='fas fa-", " fa-10x'></i>","","",""],[0, 0, "<i class='fas fa-", " fa-10x'></i>","","",""]];
 var iconArray = ['ghost','meteor','fire','user-graduate','bolt']
@@ -24,20 +23,23 @@ var opponentCardsRef = document.getElementById("opponent-cards");
 
 var modalRef = document.getElementById("game-modal");
 var cardUpgradeRef = document.getElementById("card-upgrade");
+var currentCardRef = document.getElementById("current-card");
 var modalHeaderRef = document.getElementById("modal-head");
 var modalFooterRef = document.getElementById("modal-foot");
 var modalInfoRef = document.getElementById("modal-info");
 var modalTitleRef = document.getElementById("modal-title");
 var spanRef = document.getElementsByClassName("close")[0];
-var firstTurn=true;
-var inPlayerTurn = true;
-var inOpponentTurn = false;
+var currentCardRef = document.getElementById("current-card");
+var currentCardInfo;
+var currentCard;
+var aiUpdated = false;
+var turnNumber = 0;
+var inPlayerTurn = false;
 
-// When the user clicks on <span> (x), close the modal
+
 spanRef.onclick = function() {
     modalRef.style.display = "none";
 }
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modalRef) {
       modalRef.style.display = "none";
@@ -111,56 +113,199 @@ function initializeGame() {
             cards[i].addEventListener('click', {
                 handleEvent(event) {
                     console.log("event type is: " + event.type + " calling revive card and passing in param " + event.currentTarget.id);
-                    focusOnCard(event.currentTarget);
+                    focusOnCard(event.currentTarget.id);
+                }
+            });
+            cardsHealth[i].addEventListener('click', {
+                handleEvent(event) {
+                    console.log("event type is: " + event.type + " calling update Health with " + event.currentTarget.id);
+                    upgradeHealth(event.currentTarget.id);
+                }
+            });
+            cardsDamage[i].addEventListener('click', {
+                handleEvent(event) {
+                    console.log("event type is: " + event.type + " calling update Attack with " + event.currentTarget.id);
+                    upgradeAttack(event.currentTarget.id);
                 }
             });
         }
     }
 
 function focusOnCard(cardID){
-showModal("Upgrade or Revive a Card","Click on a single button to upgrade or revive")
+showModal("Upgrade or Revive a Card","If it's your turn to attack, you can first click on a single button to upgrade or revive");
 cardUpgradeRef.style.display = "block";
+
+for (var i = 0; i < playerCardArray.length; i++){
+    console.log("player card id: " +playerCardArray[i][6] );
+    console.log("opponent card id: " +opponentCardArray[i][6] );
+
+    if (playerCardArray[i][6]==cardID){
+        currentCardInfo = playerCardArray[i];
+        console.log("card info matched! player card");
+        
+    }
+    else if (opponentCardArray[i][6]==cardID){
+        currentCardInfo = opponentCardArray[i];
+        console.log("card info matched! oppoenent card");
+        
+    }
+}
+currentCard = document.getElementById(cardID);
+currentCardRef.innerHTML = currentCard.innerHTML;
+
 }
 function upgradeAttack(){
+    if(inPlayerTurn) {
+    if (currentCard.classList.contains("playerCard")) 
+    {
+        currentCardInfo[0]+=5;
+    }
+    else if (currentCard.classList.contains("enemyCard"))
+    {
+        currentCardInfo[0]-=5;
+    }
+    refreshCards();
     modalRef.style.display = "none";
+}
+    
 }
 function upgradeHealth(){
+    if (inPlayerTurn) {
+    if (currentCard.classList.contains("playerCard")) 
+    {
+        currentCardInfo[1]+=5;
+    }
+    else if (currentCard.classList.contains("enemyCard"))
+    {
+        currentCardInfo[1]-=5;
+    }
+    refreshCards();
     modalRef.style.display = "none";
 }
+}
 function revive(){
+    if(inPlayerTurn) {
     modalRef.style.display = "none";
+    if (currentCard.classList.contains("playerCard")) 
+    {
+        var damage = parseInt(Math.random() * 6) + 1;
+        var health = 10-damage;
+        currentCardInfo[0]=damage;
+        currentCardInfo[1]=health;
+        var randomIcon = iconArray[parseInt(Math.random() * iconArray.length)];
+        currentCardInfo[5] = randomIcon;
+    }
+    refreshCards();
+    modalRef.style.display = "none";
+}
 }
 
 function gameLoop() {
     if (!gameOver) {
         if(!inPlayerTurn) {
-            playerTurn();
+           opponentTurn();
         }
-        else if(!inOpponentTurn) {
-            opponentTurn();
+        else if(inPlayerTurn) {
+            playerTurn();
         }
 
     }
 }
 function opponentTurn(){
-    playerScoreRef.innerHTML = "Opponent Turn... ready to defend against opponents attack?";
+    checkGameOver();
+    var updateText = "";
+        if(!aiUpdated) {
+    updateText += opponentAI();
+    aiUpdated = true;
+    refreshCards();
+    playerScoreRef.innerHTML = "Opponent turn: " + updateText;
+    }
     attackDefendButtonRef.innerHTML = "Defend!"
-
 }
 function playerTurn(){
-    playerScoreRef.innerHTML = "Player's Turn... ready to attack opponent?";
+    checkGameOver();
+    playerScoreRef.innerHTML = "Player's Turn: upgrade/revive then attack!";
     attackDefendButtonRef.innerHTML = "Attack!"
 }
+function opponentAI(){
+    var retText = "ready to defend against opponents attack?";
+    var cardRevive;
+    var reviveCanidate = false;
+    var cardUpgrade;
+    var upgradeCanidate = false;
+    var cardDowngrade;
+    var downgradeCanidate = false;
+    for(var i = 0; i< opponentCardArray.length; i++){
+        if (opponentCardArray[i][1] < 1){
+            cardRevive = opponentCardArray[i];
+            reviveCanidate = true;
+          }
+
+        if(playerCardArray[i][1]<5) {
+            cardDowngrade=playerCardArray[i];
+            downgradeCanidate = true;
+        }
+
+        if(opponentCardArray[i][1]<5) {
+            cardUpgrade = opponentCardArray[i];
+            upgradeCanidate = true;
+        }
+
+    }
+    var choice = parseInt(Math.random() * 6)+1;
+    if (reviveCanidate && choice<=4) {
+        var damage = parseInt(Math.random() * 6) + 1;
+        var health = 10-damage;
+        cardRevive[0]=damage;
+        cardRevive[1]=health;
+        var randomIcon = iconArray[parseInt(Math.random() * iconArray.length)];
+        cardRevive[5] = randomIcon;
+        retText = "chose to revive card";
+    }
+
+    if(upgradeCanidate && choice==5) {
+        choice = parseInt(Math.random() * 2);
+        if (choice==0) {
+        cardUpgrade[0]+=5;
+        }
+        else if (choice==1) {
+            cardUpgrade[1]+=5;
+        }
+        retText = "chose to upgrade card"
+    }
+    if(downgradeCanidate && choice==6) {
+        choice = parseInt(Math.random() * 2);
+        if (choice==0) {
+        cardDowngrade[0]-=5;
+        }
+        else if (choice==1) {
+            cardDowngrade[1]-=5;
+        }
+        retText = "chose to downgrade card"
+    }
+return retText;
+}
 function startTurn(){
+    //we'll force a reload if the player keeps playing for whatever reason:
+    if(gameOver){
+        location.reload();
+    }
+    turnNumber++;
     cardBattle();
     refreshCards();
+    //we only addListeners after the player takes a turn, preventing them from upgrading continously on the same turn
+    addListeners();
     refreshHealth();
-    inOpponentTurn = !inOpponentTurn; 
     inPlayerTurn = !inPlayerTurn;
-    if(firstTurn){
-        showModal("Click a card to upgrade or revive", "Don't forget each time you are ready to attack to first click on card you want to upgrade or revive to open the upgrade or revive options");
-        firstTurn = false;
+    if(inPlayerTurn) {
+        aiUpdated = false;
     }
+    if(turnNumber==1){
+        showModal("During your turn before you attack, click a card to upgrade, downgrade or revive, or you can directly upgrade by clicking on health or attack", "Don't forget each time you are ready to attack to first click on card you want to upgrade or revive to open the upgrade or revive options");
+        cardUpgradeRef.style.display = "none";
+    }
+    console.log("And set playerTurn value to: " + inPlayerTurn)
+
 }
 function refreshHealth(){
     playerHealthRef.innerHTML = "Player Health: " + playerHealth;
@@ -171,16 +316,17 @@ function refreshCards(){
     playerCardsRef.innerHTML = "";
     opponentCardsRef = document.getElementById("opponent-cards");
     opponentCardsRef.innerHTML = "";
+    //don't forget to update this to reflect changes made to card array
     for (var i=0; i < opponentCardArray.length; i++) {
         var card = opponentCardArray[i];
-        opponentCardsRef.innerHTML += "<div class='card' style='color:" + card[4] + "'> <div class='container'> <h1 class='damage'>" 
+        opponentCardsRef.innerHTML += "<div class='card opponentCard' id='" + card[6] + "' style='color:" + card[4] + "'> <div class='container'> <h1 class='damage'>" 
         + card[0]+ "</h1><h1 class='health'>" + card[1] + "</h1> <div class='image'>" + card[2] +
         card[5] + card[3] + "</div></div></div>";
         }
-    
+    //don't forget to update this to reflect changes made to card array
     for (var i=0; i < playerCardArray.length; i++) {
         var card = playerCardArray[i];
-        playerCardsRef.innerHTML += "<div class='card' style='color:" + card[4] + "'> <div class='container'> <h1 class='damage'>" 
+        playerCardsRef.innerHTML += "<div class='card playerCard' id='" + card[6] + "' style='color:" + card[4] + "'> <div class='container'> <h1 class='damage'>" 
         + card[0]+ "</h1><h1 class='health'>" + card[1] + "</h1> <div class='image'>" + card[2] +
         card[5] + card[3] + "</div></div></div>";
         }
@@ -199,17 +345,23 @@ function cardBattle(){
               playerCardArray[i][5] = deathIcon;
           }
     }
-    if(playerHealth<0 && opponentHealth >0){
+    checkGameOver();
+}
+function checkGameOver() {
+    if (playerHealth < 0 && opponentHealth > 0) {
         gameOver = true;
-        showModal("You lost!","Refresh your browser to play again.");
+        showModal("You lost!", "Refresh your browser to play again.");
+        cardUpgradeRef.style.display = "none";
     }
-    else if(opponentHealth<0 && playerHealth>0) {
-        gameOver = true
-        showModal("You won!","Refresh your browser to play again.");
-    }
-    else if (opponentHealth<0 && playerHealthRef < 0){
+    else if (opponentHealth < 0 && playerHealth > 0) {
         gameOver = true;
-        showModal("It was a tie, both players died!","Refresh your browser to play again");
+        showModal("You won!", "Refresh your browser to play again.");
+        cardUpgradeRef.style.display = "none";
+    }
+    else if (opponentHealth < 0 && playerHealthRef < 0) {
+        gameOver = true;
+        showModal("It was a tie, both players died!", "Refresh your browser to play again");
+        cardUpgradeRef.style.display = "none";
     }
 }
 initializeGame();
