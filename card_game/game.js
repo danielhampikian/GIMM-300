@@ -160,7 +160,7 @@ function upgradeAttack(){
     {
         currentCardInfo[0]+=5;
     }
-    else if (currentCard.classList.contains("enemyCard"))
+    else if (currentCard.classList.contains("opponentCard"))
     {
         currentCardInfo[0]-=5;
     }
@@ -175,7 +175,7 @@ function upgradeHealth(){
     {
         currentCardInfo[1]+=5;
     }
-    else if (currentCard.classList.contains("enemyCard"))
+    else if (currentCard.classList.contains("opponentCard"))
     {
         currentCardInfo[1]-=5;
     }
@@ -241,12 +241,12 @@ function opponentAI(){
             reviveCanidate = true;
           }
 
-        if(playerCardArray[i][1]<5) {
+        if(playerCardArray[i][1]<5 || playerCardArray[i][0]<5) {
             cardDowngrade=playerCardArray[i];
             downgradeCanidate = true;
         }
 
-        if(opponentCardArray[i][1]<5) {
+        if(opponentCardArray[i][1]<5 || opponentCardArray[i][0]<5) {
             cardUpgrade = opponentCardArray[i];
             upgradeCanidate = true;
         }
