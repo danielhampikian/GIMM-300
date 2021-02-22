@@ -1,0 +1,103 @@
+.card {
+    height: 300px;
+    width: 200px;
+    background-color: rgba(42, 196, 231, 0.582);
+    margin: 20px;
+    padding: 20px;
+    padding-right: 30px;
+    /* border: 2px solid black; */
+    box-shadow: 0 7px 15px 0 rgba(0, 0, 0, 0.609);
+    float: left;
+    color: white;
+    font-size: small;
+}
+
+.stats {
+    margin-top: 30px;
+    padding-top: 20px;
+    height: 30%;
+    width: 100%;
+    font-size: small;
+    font-weight: bold;
+    color:rgb(144, 0, 137);
+    background-color: rgba(255, 255, 255, 0.555);
+}
+.stats span{
+    padding:10px;
+    
+	position: relative;
+}
+
+#daniel.card {
+    background-image: url("https://media.giphy.com/media/QXV00LxnTplyYvjE9z/giphy.gif");
+
+}
+
+
+
+
+#jack.card {
+    background-image: url("https://media.giphy.com/media/l41lUSYK6w9Yq27HG/giphy.gif");
+
+}
+.info {
+    max-height: 50%;
+    width: 100%;
+}
+
+.inner {
+    padding: 30px;
+}
+.image img{
+    padding-left: 20px;
+    max-height: 90%;
+    max-width: 100px;
+}
+.inner{
+    background-color: black;
+    height:50%;
+    width: 70%;
+    padding-right: 40px;
+    /*background-image: url("https://media.giphy.com/media/xTiTnyndWrpCCcriDu/giphy.gif");  */
+}
+.wrapper {
+    margin-right: 20px;
+}
+#daniel .wrapper {
+        background: linear-gradient(81deg, #00ea09, #c300aa, #ff511e);
+        background-size: 600% 600%;
+        /* margin: 10px; */
+        padding: 10px; 
+        width: 100%;
+        -webkit-animation: AnimationName 49s ease infinite;
+        -moz-animation: AnimationName 49s ease infinite;
+        animation: AnimationName 49s ease infinite;
+    }
+
+    #jack .wrapper {
+        background: linear-gradient(81deg, #dff388be, #7bccf1, #000000);
+        background-size: 600% 600%;
+        /* margin: 10px; */
+        padding: 10px; 
+        width: 100%;
+        -webkit-animation: AnimationName 49s ease infinite;
+        -moz-animation: AnimationName 49s ease infinite;
+        animation: AnimationName 49s ease infinite;
+    }
+    
+    @-webkit-keyframes AnimationName {
+        0%{background-position:0% 18%}
+        50%{background-position:100% 83%}
+        100%{background-position:0% 18%}
+    }
+    @-moz-keyframes AnimationName {
+        0%{background-position:0% 18%}
+        50%{background-position:100% 83%}
+        100%{background-position:0% 18%}
+    }
+    @keyframes AnimationName {
+        0%{background-position:0% 18%}
+        50%{background-position:100% 83%}
+        100%{background-position:0% 18%}
+    }
+  
