@@ -1,0 +1,32 @@
+.jumbotron {
+    background-color: #360b3d; /* Orange */
+    /* background-image: url("water.jpg"); */
+    color: #ffffff;
+    padding: 100px 25px;
+}
+
+.bg-grey {
+    background-color: #746868;
+    color: #ffffff;
+    padding: 60px 50px;
+  }
+
+  .container-fluid {
+    padding: 60px 50px;
+  }
+  .card {
+    width: 18rem;
+    padding: 20px;
+    border: darkgrey 1;
+    margin: 10px;
+  }
+
+  .logo {
+    font-size: 200px;
+  }
+  @media screen and (max-width: 768px) {
+    .col-sm-4 {
+      text-align: center;
+      margin: 25px 0;
+    }
+}
