@@ -19,8 +19,8 @@ var rollsLeftDisp;
 var intID;
 var currentCubeClass = '';
 var playerLastTotal = 0;
+var intervals = {};
 
-//gets called as soon as the window loads, adds event listeners to the dice
 window.onload = function() {
   for(var i = 1; i <= 6; i++){
     var idName = 'placeholder'
@@ -29,36 +29,56 @@ window.onload = function() {
 
     elem.addEventListener('mousedown', {
         handleEvent(event) {
-          //console.log("event type is: " + event.type);
           rolling(event.currentTarget.id);
         }
     });
 
     elem.addEventListener('mouseup', {
       handleEvent(event) {
-        //console.log("event type is: " + event.type);
         rollEnd(event.currentTarget.id);
         }
     });
 
     elem.addEventListener('mouseleave', {
     handleEvent(event) {
-      //console.log("event type is: " + event.type);
       mouseLeft(event.currentTarget.id);
         }
     });
   }
 
-  //get references to the score and rounds displays
   this.getReferences();
 };
 
-function rolling(eID){
+function computerRollVisual(){
+  for (let i = 0; i <+ 20; i++) {
+    setTimeout(computerRollingVisual, 100);
+    console.log("num: " + i);
+  }
+  clearRolling();
+}
+
+function clearRolling() {
+  for(var i = 1; i <= 6; i++) {
+    clearIntervals(intervals[i]);
+    }
+}
+function computerRollingVisual() {
+
+  for(var i = 1; i <= 6; i++) {
+    var idName = 'placeholder'
+    idName = idName + i;
+    elem = document.getElementById(idName);
+    intervals[i] = setInterval(rotateCube, 100, idName);
+    }
+}
+
+
+function rolling(eID) {
     console.log("rolling: " + eID);
     intID = setInterval(rotateCube,100,eID);
     clicked = true;
 }
-function rollEnd(eID){
+function rollEnd(eID) {
   clicked = false;
   console.log("unclicked: " + eID + " num to index is: " + parseInt(eID.substring(eID.length - 1)));
   clearInterval(intID);
@@ -66,18 +86,16 @@ function rollEnd(eID){
 }
 function mouseLeft(eID){
   if(clicked) {
-  console.log("mouse left: " + eID);
-  clearInterval(intID);
-  rollEnd(eID);
+    console.log("mouse left: " + eID);
+    clearInterval(intID);
+    rollEnd(eID);
   }
   clicked = false;
 
 }
 
-//rotates cubes by adding and removing classes that contain the animation and xyz rotation of the cube faces
 function rotateCube(eID){
   var cube = document.getElementById(eID);
-  //console.log(cube.classList);
   var showClass = 'show-' + getNextNumber();
   var cubeClass = 'cube';
   if ( currentCubeClass ) {
@@ -88,7 +106,7 @@ function rotateCube(eID){
   currentCubeClass = showClass;
 }
 
-function restart(){
+function restart() {
 totalPlayerScore = 0;
 totalComputerScore = 0;
 gameOver = false;
@@ -101,8 +119,8 @@ lastRoll = 0;
 }
 
 function roundLost() {
-  if (rollsLeft <= 0 && playerS <= computerS){
-    return true;
+  if (rollsLeft <= 0 && playerS <= computerS) {
+      return true;
   }
   else return false;
 }
@@ -117,12 +135,13 @@ function loadGame(){
   resetDice();
   computerRoll();
   updateDisp();
+  computerRollVisual();
 }
 
 function computerRoll(){
   var nextScore = 0;
   for (i = 0; i < 4 + rollLoss; i++) {
-    nextScore += getNextNumber();
+      nextScore += getNextNumber();
     }
   computerS = Math.max(computerS,nextScore);
   totalComputerScore += computerS;
@@ -135,7 +154,7 @@ function nextRound(){
     gameOver = true;
     showModal("Nice Try, but you lost! Play again?", "Your total score was: " + totalPlayerScore + " to " + totalComputerScore);
   }
-  else if (rollsLeft<=0){
+  else if (rollsLeft<=0) {
     totalPlayerScore += playerS;
     rounds -= 1;
     rollLoss++;
@@ -175,7 +194,7 @@ function getReferences(){
   computerScoreDisp = document.getElementById("computerScoreDisp");
   roundDisp = document.getElementById("roundDisp");
   rollsLeftDisp = document.getElementById("rollsLeftDisp");
-  showModal("Try to beat the computers roll.  Scores compared after all rolls are used.", "Each round you start with less total rolls");
+  showModal("Try to beat the AI's rolls by clicking on die to roll again.  Scores compared each round after all rolls are used.", "Each round you start with less total rolls", "Ready for the AI to roll all their rolls?");
 }
 
 function getNextNumber(){
@@ -188,7 +207,6 @@ function getPlayerScore(){
   var sum = numArray.reduce(function(a, b){
     return a + b;
     }, 0);
-  //console.log(sum);
   playerS = parseInt(sum);
 }
 
@@ -206,7 +224,6 @@ function rollDie(placeholderID, indx)
   cube.classList.add(cubeClass);
   cube.classList.add(showClass);
   currentCubeClass = showClass;
-  //document.getElementById(placeholderID).src = pictureRef;
   getPlayerScore();
   nextRound();
   updateDisp();
@@ -222,7 +239,6 @@ function resetDice(){
     var cubeClass = 'cube';
     cube.classList.add(cubeClass);
     cube.classList.add(showClass);
-    //document.getElementById(idName).src = "d1.png";
   }
 }
 

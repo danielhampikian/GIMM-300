@@ -5,8 +5,8 @@
 .jumbotron{
   background-color:hsla(283, 100%, 76%, 0.7) !important;
   box-shadow: 
-  inset 60px 0 120px rgba(93, 0, 93, .5),  /* left magenta */
-  inset -60px 0 120px rgba(0, 36, 102, .5); /* right cyan */
+  inset 60px 0 120px rgba(93, 0, 93, .5),  
+  inset -60px 0 120px rgba(0, 36, 102, .5); 
   }
 
 
@@ -36,6 +36,7 @@
 
 
   .card {
+    margin: 10px;
     width: 400px;
     height: 200px;
     background-color: #fff;
@@ -67,7 +68,6 @@ img{
   width: 100%;
 }
 .card{
-  margin: 10px;
 }
 .flex-container {
   display: flex;
